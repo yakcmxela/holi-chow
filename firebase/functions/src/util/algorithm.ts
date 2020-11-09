@@ -1,7 +1,6 @@
 import _get from "lodash/get";
 import { differenceInMonths } from "date-fns";
 import {
-  ActivityValue,
   AlgorithmResponse,
   Blend,
   BodyValue,
@@ -97,52 +96,28 @@ export const runAlgorithm = (data: any): AlgorithmResponse => {
   let blend = Blend.adult;
   switch (lifestage) {
     case 0:
-      blend =
-        body === BodyValue.overweight ||
-        (body === BodyValue.slightlyOver && stool === Stool.bad) ||
-        (body === BodyValue.ideal &&
-          activity === ActivityValue.potato &&
-          stool === Stool.bad)
-          ? Blend.puppyWeight
-          : Blend.puppy;
+      blend = Blend.puppy;
       break;
     case 1:
-      if (body === BodyValue.overweight) {
-        blend = Blend.weightOnly;
-      } else if (
-        body === BodyValue.slightlyOver ||
-        (body === BodyValue.ideal && stool === Stool.bad)
-      ) {
+      if (body <= BodyValue.slightlyOver || stool === Stool.bad) {
         blend = Blend.weightManagement;
-      } else if (
-        (body === BodyValue.slightlyUnder && stool === Stool.bad) ||
-        (body === BodyValue.under && stool === Stool.bad)
-      ) {
-        blend = Blend.puppyWeight;
-      } else if (body === BodyValue.slightlyUnder || body === BodyValue.under) {
+      } else if (body >= BodyValue.slightlyUnder) {
         blend = Blend.puppy;
       } else {
         blend = Blend.adult;
       }
       break;
     case 2:
-      blend =
-        body === BodyValue.overweight ||
-        body === BodyValue.slightlyOver ||
-        (body === BodyValue.ideal && stool === Stool.bad)
-          ? Blend.weightManagement
-          : Blend.adult;
+      if (body <= BodyValue.slightlyOver || stool === Stool.bad) {
+        blend = Blend.weightManagement;
+      } else {
+        blend = Blend.adult;
+      }
   }
 
   const kibbleHandle =
     blend === Blend.puppy
       ? KibbleHandle.puppy
-      : blend === Blend.puppyWeight
-      ? KibbleHandle.weight
-      : blend === Blend.weightOnly
-      ? KibbleHandle.weight
-      : blend === Blend.adult
-      ? KibbleHandle.adult
       : blend === Blend.weightManagement
       ? KibbleHandle.weight
       : KibbleHandle.adult;
@@ -253,10 +228,6 @@ const formulationVolumes = {
     cal: 3799,
     bulk: 441,
   },
-  [Blend.puppyWeight]: {
-    cal: 3565,
-    bulk: 412,
-  },
   [Blend.adult]: {
     cal: 3847,
     bulk: 435,
@@ -264,10 +235,6 @@ const formulationVolumes = {
   [Blend.weightManagement]: {
     cal: 3594,
     bulk: 409,
-  },
-  [Blend.weightOnly]: {
-    cal: 3117,
-    bulk: 358,
   },
   [Blend.topper]: {
     cal: 3900,

@@ -19,10 +19,8 @@ export enum ActivityValue {
 export enum Blend {
   adult = "Adult",
   puppy = "Puppy",
-  puppyWeight = "Puppy + Weight",
   topper = "Topper",
   weightManagement = "Weight Management",
-  weightOnly = "Weight Only",
 }
 
 export enum BodyDescription {
