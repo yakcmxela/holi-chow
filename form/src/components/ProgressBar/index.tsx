@@ -3,13 +3,13 @@ import React from "react";
 interface ProgressBarProps {
   progress: number;
   onNavigateForm: (section: number) => void;
-  onSavePet: () => void;
+  onSavePendingPet: () => void;
 }
 
 export const ProgressBar = ({
   progress,
   onNavigateForm,
-  onSavePet,
+  onSavePendingPet,
 }: ProgressBarProps) => {
   return progress === 0 ? null : (
     <div className="pet-profile-section">
@@ -42,7 +42,7 @@ export const ProgressBar = ({
               href="#pet-profile-section-3"
               className="button-text"
               onClick={() => {
-                onSavePet && onSavePet();
+                onSavePendingPet && onSavePendingPet();
                 onNavigateForm(progress - 1);
               }}
             >

@@ -1,61 +1,42 @@
-export enum PetFields {
-  activity = "activity",
-  allergies = "allergies",
-  birthdate = "birthdate",
-  body = "body",
-  breeds = "breeds",
-  neutered = "neutered",
-  issues = "issues",
-  id = "id",
-  name = "name",
-  picky = "picky",
-  scraps = "scraps",
-  sex = "sex",
-  stool = "stool",
-  topper = "topper",
-  treats = "treats",
-  weight = "weight",
-}
-
 export enum ActivityDescription {
-  jogger = "Jogger",
-  olympian = "Olympian",
-  potato = "Couch Potato",
-  runner = "Runner",
-  walker = "Walker",
+  JOGGER = "Jogger",
+  OLYMPIAN = "Olympian",
+  POTATO = "Couch Potato",
+  RUNNER = "Runner",
+  WALKER = "Walker",
 }
 
 export enum ActivityValue {
-  jogger = 1.4,
-  olympian = 1.8,
-  potato = 1,
-  runner = 1.6,
-  walker = 1.3,
+  JOGGER = 1.4,
+  OLYMPIAN = 1.8,
+  POTATO = 1,
+  RUNNER = 1.6,
+  WALKER = 1.3,
 }
 
 export enum Blend {
-  adult = "Adult",
-  puppy = "Puppy",
-  puppyWeight = "Puppy + Weight",
-  topper = "Topper",
-  weightManagement = "Weight Management",
-  weightOnly = "Weight Only",
+  ADULT = "Adult",
+  PUPPY = "Puppy",
+  PUPPY_WEIGHT = "Puppy + Weight",
+  TOPPER = "Topper",
+  WEIGHT_MANAGEMENT = "Weight Management",
+  WEIGHT_ONLY = "Weight Only",
 }
 
 export enum BodyDescription {
-  ideal = "Ideal",
-  overweight = "Overweight",
-  slightlyOver = "Slightly Over",
-  slightlyUnder = "Slightly Under",
-  under = "Very Under",
+  IDEAL = "Ideal",
+  OVERWEIGHT = "Overweight",
+  SLIGHTLY_OVER = "Slightly Over",
+  SLIGHTLY_UNDER = "Slightly Under",
+  UNDER = "Very Under",
 }
 
 export enum BodyValue {
-  ideal = 1.4,
-  overweight = 1,
-  slightlyOver = 1.2,
-  slightlyUnder = 1.6,
-  under = 1.8,
+  IDEAL = 1.4,
+  OVERWEIGHT = 1,
+  SLIGHTLY_OVER = 1.2,
+  SLIGHTLY_UNDER = 1.6,
+  UNDER = 1.8,
 }
 
 export interface Breed {
@@ -64,9 +45,9 @@ export interface Breed {
 }
 
 export enum BreedCount {
-  single = "Single Breed",
-  mixed = "Mixed Breed",
-  mutt = "Supermutt",
+  SINGLE = "Single Breed",
+  MIXED = "Mixed Breed",
+  MUTT = "Supermutt",
 }
 
 export enum BreedSize {
@@ -78,41 +59,60 @@ export enum BreedSize {
 }
 
 export enum KibbleHandle {
-  default = "kibble",
-  puppy = "kibble-puppy",
-  adult = "kibble-adult",
-  weight = "kibble-weight-management",
+  DEFAULT = "kibble",
+  PUPPY = "kibble-puppy",
+  ADULT = "kibble-adult",
+  WEIGHT = "kibble-weight-management",
 }
 
 export type Pet = {
-  [PetFields.activity]: ActivityValue;
-  [PetFields.allergies]: Array<string>;
-  [PetFields.birthdate]: number;
-  [PetFields.body]: BodyValue;
-  [PetFields.breeds]: Array<Breed>;
-  [PetFields.neutered]: boolean;
-  [PetFields.issues]: Array<string>;
-  [PetFields.id]: string;
-  [PetFields.name]: string;
-  [PetFields.picky]: number;
-  [PetFields.scraps]: number;
-  [PetFields.sex]: Sex;
-  [PetFields.stool]: Stool;
-  [PetFields.topper]: string;
-  [PetFields.treats]: number;
-  [PetFields.weight]: number;
+  [PetFields.ACTIVITY]: ActivityValue;
+  [PetFields.ALLERGIES]: Array<string>;
+  [PetFields.BIRTHDATE]: number;
+  [PetFields.BODY]: BodyValue;
+  [PetFields.BREEDS]: Array<Breed>;
+  [PetFields.NEUTERED]: boolean;
+  [PetFields.ISSUES]: Array<string>;
+  [PetFields.ID]: string;
+  [PetFields.NAME]: string;
+  [PetFields.PICKY]: number;
+  [PetFields.SCRAPS]: number;
+  [PetFields.SEX]: Sex;
+  [PetFields.STOOL]: Stool;
+  [PetFields.TOPPER]: string;
+  [PetFields.TREATS]: number;
+  [PetFields.WEIGHT]: number;
 };
+
+export enum PetFields {
+  ACTIVITY = "activity",
+  ALLERGIES = "allergies",
+  BIRTHDATE = "birthdate",
+  BODY = "body",
+  BREEDS = "breeds",
+  NEUTERED = "neutered",
+  ISSUES = "issues",
+  ID = "id",
+  NAME = "name",
+  PICKY = "picky",
+  SCRAPS = "scraps",
+  SEX = "sex",
+  STOOL = "stool",
+  TOPPER = "topper",
+  TREATS = "treats",
+  WEIGHT = "weight",
+}
 
 export type Pets = Array<Pet>;
 
 export enum Stool {
-  good = "good",
-  bad = "bad",
+  GOOD = "good",
+  BAD = "bad",
 }
 
 export enum Sex {
-  male = "boy",
-  female = "girl",
+  MALE = "boy",
+  FEMALE = "girl",
 }
 
 export type AlgorithmResponse = {
@@ -143,14 +143,14 @@ export interface Shipment {
 }
 
 export enum Toppers {
-  beefLiver = "beef-liver-protein-pack",
-  lambLiver = "lamb-liver-protein-pack",
-  turkey = "turkey-breast-protein-pack",
-  salmon = "wild-caught-salmon-protein-pack",
-  rabbit = "rabbit-protein-pack",
-  chicken = "chicken-breast-protein-pack",
-  varietyClassic = "variety-pack-classic",
-  varietyLand = "variety-pack-land-lovers",
-  varietySurfTurf = "variety-pack-surf-turf-and-sky",
-  varietyFishFowl = "variety-pack-fish-fowl",
+  BEEF_LIVER = "beef-liver-protein-pack",
+  LAMB_LIVER = "lamb-liver-protein-pack",
+  TURKEY = "turkey-breast-protein-pack",
+  SALMON = "wild-caught-salmon-protein-pack",
+  RABBIT = "rabbit-protein-pack",
+  CHICKEN = "chicken-breast-protein-pack",
+  VARIETY_CLASSIC = "variety-pack-classic",
+  VARIETY_LAND = "variety-pack-land-lovers",
+  VARIETY_SURF_TURF = "variety-pack-surf-turf-and-sky",
+  VARIETY_FISH_FOWL = "variety-pack-fish-fowl",
 }

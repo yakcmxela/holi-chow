@@ -1,29 +1,27 @@
-import { AnyAction } from "redux";
-import { StoreActions } from "../../entities/actions";
-import { Pets, Pet } from "../../entities/pets";
-import { RecommendationResponse } from "../../entities/api";
+import { AnyAction } from 'redux';
+import { StoreActions } from '../../entities/actions';
+import { Pets, Pet } from '../../entities/pets';
+import { RecommendationResponse } from '../../entities/api';
 
 interface PetsReducer {
+  canSavePersisted: boolean;
   loading: boolean;
   pendingPets: Pets;
-  persistedActiveSection: number;
-  persistedPet: Pet | null;
   pets: Pets;
   savedRecommendations: Array<RecommendationResponse>;
 }
 
 export const initialState: PetsReducer = {
+  canSavePersisted: false,
   loading: false,
   pendingPets: [],
-  persistedActiveSection: 0,
-  persistedPet: null,
   pets: [],
   savedRecommendations: [],
 };
 
 export const PetsReducer = (state = initialState, action: AnyAction) => {
   switch (action.type) {
-    case StoreActions.FetchedPets:
+    case StoreActions.FETCHED_PETS:
       const savedPets = action.payload.map(
         (pet: RecommendationResponse) => pet.pet
       );
@@ -43,57 +41,49 @@ export const PetsReducer = (state = initialState, action: AnyAction) => {
       });
       return Object.assign({}, state, {
         ...state,
+        canSavePersisted: true,
         pets: mergedPets,
         savedRecommendations: action.payload,
         loading: false,
       });
-    case StoreActions.IsLoadingPets:
+    case StoreActions.IS_LOADING_PETS:
       return Object.assign({}, state, {
         ...state,
         loading: action.payload,
       });
-    case StoreActions.ResetPendingPets:
+    case StoreActions.PERSIST_PETS:
+      return Object.assign({}, state, {
+        ...state,
+        pendingPets: action.payload,
+      });
+    case StoreActions.RESET_PENDING_PETS:
       return Object.assign({}, state, {
         ...state,
         pendingPets: [],
-        persistedActiveSection: initialState.persistedPet,
-        persistedPet: initialState.persistedPet,
       });
-    case StoreActions.SavePet:
+    case StoreActions.SAVE_PET:
       const existingPets = [...state.pendingPets].filter(
-        (pet) => pet.id === action.payload.pet.id
+        (pet) => pet.id === action.payload.id
       );
       const withNewPet = [...state.pendingPets]
         .map((pet) => pet)
-        .concat(action.payload.pet);
+        .concat(action.payload);
       const pendingPets = existingPets.length
         ? [...state.pendingPets].map((pet) => {
-            if (pet.id === action.payload.pet.id) {
-              return action.payload.pet;
+            if (pet.id === action.payload.id) {
+              return action.payload;
             }
             return pet;
           })
         : withNewPet;
-      const persistedPet = { ...action.payload.pet };
-      const persistedActiveSection = action.payload.activeSection;
       return Object.assign({}, state, {
         ...state,
         pendingPets,
-        persistedActiveSection,
-        persistedPet,
       });
-    case StoreActions.StartFromSaved:
+    case StoreActions.START_FROM_SAVED:
       return Object.assign({}, state, {
         ...state,
         pendingPets: [action.payload],
-        persistedActiveSection: initialState.persistedActiveSection,
-        persistedPet: action.payload,
-      });
-    case StoreActions.StartNewPet:
-      return Object.assign({}, state, {
-        ...state,
-        persistedActiveSection: initialState.persistedActiveSection,
-        persistedPet: initialState.persistedPet,
       });
     default:
       return state;

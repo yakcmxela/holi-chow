@@ -1,8 +1,8 @@
-import React from "react";
-import { FormSectionProps, FormSections } from "../../entities/form";
-import { PetFields, Pet } from "../../entities/pets";
-import { useGetPossessive } from "../../hooks";
-import { IProductWithMetafields } from "../../entities/products";
+import React from 'react';
+import { FormSectionProps, FormSections } from '../../entities/form';
+import { PetFields, Pet } from '../../entities/pets';
+import { useGetPossessive } from '../../hooks';
+import { IProductWithMetafields } from '../../entities/products';
 
 interface TopperSection extends FormSectionProps {
   onRequestResults: () => void;
@@ -16,7 +16,6 @@ export const Toppers = ({
   onNavigateForm,
   onRequestResults,
   onStartNewPet,
-  onSavePet,
   pendingPets,
   pet,
   toppers,
@@ -32,22 +31,22 @@ export const Toppers = ({
       <div className="fields">
         <ul>
           {toppers.map((topper, i) => {
-            let allergies = "";
-            let issues = "";
+            let allergies = '';
+            let issues = '';
             let picky = null;
             let ingredients = null;
             topper.metafields.forEach((field: any) => {
               switch (field.key) {
-                case "warning_contents":
+                case 'warning_contents':
                   allergies = field.value;
                   break;
-                case "recommended_for":
+                case 'recommended_for':
                   issues = field.value;
                   break;
-                case "for_picky":
+                case 'for_picky':
                   picky = field.value;
                   break;
-                case "ingredients":
+                case 'ingredients':
                   ingredients = field.value;
                   break;
               }
@@ -102,7 +101,7 @@ export const Toppers = ({
                     onChange={(event) =>
                       onChangePet({
                         value: event.target.value,
-                        field: PetFields.topper,
+                        field: PetFields.TOPPER,
                       })
                     }
                   />
@@ -113,12 +112,12 @@ export const Toppers = ({
                     <span className="alerts">
                       {warnings.allergies.display && (
                         <span className="allergies-warning vis">
-                          Contains {warnings.allergies.items.join(", ")}
+                          Contains {warnings.allergies.items.join(', ')}
                         </span>
                       )}
                       {warnings.issues.display && (
                         <span className="issues-recommend vis">
-                          Recommended for {warnings.issues.items.join(", ")}
+                          Recommended for {warnings.issues.items.join(', ')}
                         </span>
                       )}
                       {warnings.picky.display && (
@@ -146,8 +145,8 @@ export const Toppers = ({
       </div>
       <div className="pet-profile-form-nav">
         <button
-          disabled={pet.topper === ""}
-          className={`button ${pet.topper === "" && "disable"}`}
+          disabled={pet.topper === ''}
+          className={`button ${pet.topper === '' && 'disable'}`}
           onClick={(e) => {
             e.preventDefault();
             onStartNewPet();
@@ -157,11 +156,10 @@ export const Toppers = ({
           Add Another Pet
         </button>
         <button
-          disabled={pet.topper === ""}
-          className={`button ${pet.topper === "" && "disable"}`}
+          disabled={pet.topper === ''}
+          className={`button ${pet.topper === '' && 'disable'}`}
           onClick={(e) => {
             e.preventDefault();
-            onSavePet && onSavePet();
             onRequestResults();
           }}
         >

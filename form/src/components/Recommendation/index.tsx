@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { useGetPossessive } from "../../hooks";
-import { RecommendationResponse } from "../../entities/api";
-import { useGetTotalPrice } from "../../hooks/useGetTotalPrice";
-import { Blend, BodyValue } from "../../entities/pets";
-import { useGetGender } from "../../hooks/useGetGender";
-import { useGetWeights } from "../../hooks/useGetWeights";
+import React, { useState } from 'react';
+import { useGetPossessive } from '../../hooks';
+import { RecommendationResponse } from '../../entities/api';
+import { useGetTotalPrice } from '../../hooks/useGetTotalPrice';
+import { Blend, BodyValue } from '../../entities/pets';
+import { useGetGender } from '../../hooks/useGetGender';
+import { useGetWeights } from '../../hooks/useGetWeights';
 
 interface RecommendationProps extends RecommendationResponse {
   defaultOpen: boolean;
@@ -29,33 +29,33 @@ export const Recommendation = ({
   });
 
   const tabOne =
-    process.env.NODE_ENV === "development"
-      ? require("../../public/kibble-bowl-sweet-potato.png")
+    process.env.NODE_ENV === 'development'
+      ? require('../../public/kibble-bowl-sweet-potato.png')
       : '{{ "kibble-bowl-sweet-potato.png" | asset_url }}';
   const tabTwo =
-    process.env.NODE_ENV === "development"
-      ? require("../../public/measuring-cups.png")
+    process.env.NODE_ENV === 'development'
+      ? require('../../public/measuring-cups.png')
       : '{{ "measuring-cups.png" | asset_url }}';
   const tabThree =
-    process.env.NODE_ENV === "development"
-      ? require("../../public/sweet-potato-fruit.png")
+    process.env.NODE_ENV === 'development'
+      ? require('../../public/sweet-potato-fruit.png')
       : '{{ "sweet-potato-fruit.png" | asset_url }}';
 
   const quarter =
-    process.env.NODE_ENV === "development"
-      ? require("../../public/quarter.png")
+    process.env.NODE_ENV === 'development'
+      ? require('../../public/quarter.png')
       : '{{ "quarter.png" | asset_url }}';
   const half =
-    process.env.NODE_ENV === "development"
-      ? require("../../public/half.png")
+    process.env.NODE_ENV === 'development'
+      ? require('../../public/half.png')
       : '{{ "half.png" | asset_url }}';
   const threeQuarter =
-    process.env.NODE_ENV === "development"
-      ? require("../../public/three-quarter.png")
+    process.env.NODE_ENV === 'development'
+      ? require('../../public/three-quarter.png')
       : '{{ "three-quarter.png.png" | asset_url }}';
   const whole =
-    process.env.NODE_ENV === "development"
-      ? require("../../public/whole.png")
+    process.env.NODE_ENV === 'development'
+      ? require('../../public/whole.png')
       : '{{ "whole.png" | asset_url }}';
 
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -65,24 +65,24 @@ export const Recommendation = ({
   let ingredientsTopper = null;
   let nutritionTopper = null;
   kibble.metafields.forEach((field) => {
-    if (field.key === "ingredients") {
+    if (field.key === 'ingredients') {
       ingredientsKibble = field.value;
     }
-    if (field.key === "nutrition_facts") {
+    if (field.key === 'nutrition_facts') {
       nutritionKibble = field.value;
     }
   });
   topper.metafields.forEach((field) => {
-    if (field.key === "ingredients") {
+    if (field.key === 'ingredients') {
       ingredientsTopper = field.value;
     }
-    if (field.key === "nutrition_facts") {
+    if (field.key === 'nutrition_facts') {
       nutritionTopper = field.value;
     }
   });
 
   return (
-    <div className={`pet-result-section ${open && "open"}`}>
+    <div className={`pet-result-section ${open && 'open'}`}>
       <div className="section-header">
         <div className="section-header-flex">
           <ul className="products-preview">
@@ -118,7 +118,7 @@ export const Recommendation = ({
           </div>
         </div>
         <div className="button reverse" onClick={() => setOpen(!open)}>
-          See Feeding Schedule, Nutrition Info, and More{" "}
+          See Feeding Schedule, Nutrition Info, and More{' '}
           <i className="far fa-angle-down"></i>
         </div>
       </div>
@@ -128,30 +128,31 @@ export const Recommendation = ({
         </div>
         <div className="feeding-plan-tabs">
           <div className="tabs-nav">
-            <div className={`feeding-tab-link ${activeTab === 0 && "active"}`}>
+            <div className={`feeding-tab-link ${activeTab === 0 && 'active'}`}>
               <a onClick={() => setActiveTab(0)}>Insights</a>
             </div>
-            <div className={`feeding-tab-link ${activeTab === 1 && "active"}`}>
+            <div className={`feeding-tab-link ${activeTab === 1 && 'active'}`}>
               <a onClick={() => setActiveTab(1)}>Feeding Schedule</a>
             </div>
-            <div className={`feeding-tab-link ${activeTab === 2 && "active"}`}>
+            <div className={`feeding-tab-link ${activeTab === 2 && 'active'}`}>
               <a onClick={() => setActiveTab(2)}>Ingredients / Nutrition</a>
             </div>
           </div>
           <div className="tabs-container">
-            <div className={`feeding-tab ${activeTab === 0 && "active"}`}>
+            <div className={`feeding-tab ${activeTab === 0 && 'active'}`}>
               <h3 className="title">{dogName} Insights</h3>
               <figure>
                 <img src={tabOne} alt="Healthy bowl of kibble" />
               </figure>
               <div className="content insights-content">
-                {recommendation.lifestage === 0 && (
-                  <p>
-                    Congrats on your fur baby! Puppies are hard work, but so
-                    much fun!
-                  </p>
-                )}
-                {recommendation.blend === Blend.puppy &&
+                {recommendation.lifestage === 0 &&
+                  recommendation.blend === Blend.PUPPY && (
+                    <p>
+                      Congrats on your fur baby! Puppies are hard work, but so
+                      much fun!
+                    </p>
+                  )}
+                {recommendation.blend === Blend.PUPPY &&
                   (recommendation.lifestage === 0 ? (
                     <p>
                       Based on what you told us about {pet.name}, we’ve selected
@@ -166,9 +167,9 @@ export const Recommendation = ({
                     <>
                       <p>
                         Based on what you told us about {pet.name}, we’ve
-                        selected our Puppy recipe for {himHer}. Even though{" "}
+                        selected our Puppy recipe for {himHer}. Even though{' '}
                         {pet.name} is an adult, the increased protein and
-                        moderate fat levels in our puppy recipe will help{" "}
+                        moderate fat levels in our puppy recipe will help{' '}
                         {himHer} put on the weight {heShe} needs to get to ideal
                         body condition.
                       </p>
@@ -180,7 +181,7 @@ export const Recommendation = ({
                       </p>
                     </>
                   ))}
-                {recommendation.blend === Blend.adult && (
+                {recommendation.blend === Blend.ADULT && (
                   <p>
                     Based on what you told us about {pet.name} we’ve selected
                     our Adult recipe for {himHer}. With optimally balanced
@@ -192,7 +193,9 @@ export const Recommendation = ({
                     Omega 3s for anti-inflammatory benefits.
                   </p>
                 )}
-                {recommendation.blend === Blend.weightManagement && (
+                {(recommendation.blend === Blend.WEIGHT_MANAGEMENT ||
+                  recommendation.blend === Blend.WEIGHT_ONLY ||
+                  recommendation.blend === Blend.PUPPY_WEIGHT) && (
                   <p>
                     Based on what you told us about {pet.name} we’ve selected
                     our Weight Management recipe for {himHer}. This recipe is
@@ -204,7 +207,7 @@ export const Recommendation = ({
                 )}
                 <p>
                   HOLI Superfood base recipes are plant based, non-allergenic,
-                  and contain no animal proteins. Pairing it with our{" "}
+                  and contain no animal proteins. Pairing it with our{' '}
                   {topper.product.title} will provide a delicious, complete and
                   balanced meal for {pet.name}!
                 </p>
@@ -212,17 +215,17 @@ export const Recommendation = ({
                   <p>
                     Older dogs like {pet.name} sometimes have joint trouble and
                     can’t quite keep up as well as we and they would like to. We
-                    recommend adding Happy Again joint supplement to {hisHers}{" "}
+                    recommend adding Happy Again joint supplement to {hisHers}{' '}
                     feeding plan to get that spring back in their step.
                   </p>
                 )}
-                {pet.weight > 60 && (
+                {pet.weight > 60 && recommendation.lifestage !== 0 && (
                   <p>
                     Since {pet.name} is a large dog, we recommend adding Happy
                     Again joint supplement to {hisHers} feeding plan.
                   </p>
                 )}
-                {pet.body <= BodyValue.overweight && (
+                {pet.body <= BodyValue.SLIGHTLY_OVER && (
                   <p>
                     <strong>Featured Superfoods:</strong> Sweet Potato (dietary
                     fiber, Vitamins A, B6, C, Calcium, and Iron), Blueberries
@@ -232,7 +235,7 @@ export const Recommendation = ({
                     health)
                   </p>
                 )}
-                {pet.body >= BodyValue.ideal && (
+                {pet.body >= BodyValue.IDEAL && (
                   <p>
                     <strong>Featured Superfoods:</strong> Chickpeas (protein,
                     minerals, Vitamins A,B,C and fiber), Blueberries
@@ -242,26 +245,29 @@ export const Recommendation = ({
                     fiber).
                   </p>
                 )}
-                <p>
-                  You’ll want to make sure to divide {dogName} meals into at
-                  least 2 feedings per day since puppies need that fuel to keep
-                  up their energy levels.
-                </p>
+                {recommendation.lifestage === 0 &&
+                  recommendation.blend === Blend.PUPPY && (
+                    <p>
+                      You’ll want to make sure to divide {dogName} meals into at
+                      least 2 feedings per day since puppies need that fuel to
+                      keep up their energy levels.
+                    </p>
+                  )}
                 {pet.issues.map((issue) => {
                   switch (issue) {
-                    case "Skin and Coat":
-                      return (
-                        <p>
-                          For {dogName} skin and coat issues we highly recommend
-                          adding Dig Labs Skin and Coat supplement to {himHer}{" "}
-                          feeding plan.
-                        </p>
-                      );
-                    case "Joints":
+                    case 'Joints':
                       return (
                         <p>
                           For {dogName} joint issues, we highly recommend adding
                           Happy Again joint supplement to {himHer} feeding plan.
+                        </p>
+                      );
+                    case 'Skin and Coat':
+                      return (
+                        <p>
+                          For {dogName} skin and coat issues we highly recommend
+                          adding Dig Labs Skin and Coat supplement to {himHer}{' '}
+                          feeding plan.
                         </p>
                       );
                     default:
@@ -271,7 +277,7 @@ export const Recommendation = ({
               </div>
               <div className="clear"></div>
             </div>
-            <div className={`feeding-tab ${activeTab === 1 && "active"}`}>
+            <div className={`feeding-tab ${activeTab === 1 && 'active'}`}>
               <h3 className="title">{dogName} Feeding Schedule</h3>
               <figure>
                 <img src={tabTwo} alt="Measuring cups" />
@@ -285,16 +291,12 @@ export const Recommendation = ({
                   {Math.floor(recommendation.dailyCalories)}
                   <br />
                   <strong>Daily Superfood Base Serving: </strong>
-                  {(
-                    Math.round(recommendation.dailyVolumeCups / 0.25) * 0.25
-                  )}{" "}
+                  {Math.round(recommendation.dailyVolumeCups / 0.25) *
+                    0.25}{' '}
                   cups
                   <br />
                   <strong>Daily Protein Pack Serving: </strong>
-                  {(
-                    Math.round(recommendation.dailyVolumeTbsp / 0.5) * 0.5
-                  )}{" "}
-                  tbsp
+                  {Math.round(recommendation.dailyVolumeTbsp / 0.5) * 0.5} tbsp
                 </p>
                 <div className="schedule-transition">
                   <h3>Transition Schedule</h3>
@@ -335,7 +337,7 @@ export const Recommendation = ({
               </div>
               <div className="clear"></div>
             </div>
-            <div className={`feeding-tab ${activeTab === 2 && "active"}`}>
+            <div className={`feeding-tab ${activeTab === 2 && 'active'}`}>
               <h3 className="title">Ingredients / Nutrition</h3>
               <figure>
                 <img

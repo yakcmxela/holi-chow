@@ -1,123 +1,138 @@
-import { HoliThunk } from "../../entities/thunks";
-import { Pet, AlgorithmResponse } from "../../entities/pets";
-import { StoreActions } from "../../entities/actions";
-import firebase from "firebase";
-import { RecommendationResponse } from "../../entities/api";
+import { HoliThunk } from '../../entities/thunks';
+import { Pet, AlgorithmResponse } from '../../entities/pets';
+import { RecommendationResponse } from '../../entities/api';
+import { StoreActions } from '../../entities/actions';
+import firebase from 'firebase';
 
 export const loadCustomerPets = (customerId: string): HoliThunk => async (
   dispatch
 ) => {
   firebase
     .functions()
-    .httpsCallable("CALL-fetchPets")({
+    .httpsCallable('CALL-fetchPets')({
       customerId,
     })
     .then(({ data }) => {
       const { meta } = data;
       dispatch({
-        type: StoreActions.FetchedPets,
-        payload: meta,
+        type: StoreActions.FETCHED_PETS,
+        payload: meta || [],
       });
       dispatch({
-        type: StoreActions.IsLoadingPets,
+        type: StoreActions.IS_LOADING_PETS,
         payload: false,
       });
     })
     .catch((error) => {
       console.log(error);
       dispatch({
-        type: StoreActions.IsLoadingPets,
+        type: StoreActions.IS_LOADING_PETS,
         payload: false,
       });
     });
 };
 
-export const resetPendingPets = (): HoliThunk => async (dispatch) => {
-  dispatch({
-    type: StoreActions.ResetPendingPets,
-  });
-};
-
-export const saveCurrentPet = (
-  pet: Pet,
-  activeSection: number
-): HoliThunk => async (dispatch) => {
-  dispatch({
-    type: StoreActions.SavePet,
-    payload: {
-      activeSection,
-      pet,
-    },
-  });
-};
-
 export const savePetsToCustomer = (
   customerId: string,
-  recommendations: Array<RecommendationResponse>
+  recommendations: Array<RecommendationResponse> | null
 ): HoliThunk => (dispatch, getStore) => {
+  dispatch({
+    type: StoreActions.IS_LOADING_PETS,
+    payload: true,
+  });
   interface RecommendationsForSave {
     pet: Pet;
-    recommendation: AlgorithmResponse;
-    kibble: {
+    recommendation?: AlgorithmResponse;
+    kibble?: {
       product: {
         title: string;
       };
     };
-    topper: {
+    topper?: {
       product: {
         title: string;
       };
     };
   }
-  const savedRecommendations: Array<RecommendationsForSave> = getStore().PetsReducer.savedRecommendations.map(
+
+  let savedRecommendations: Array<RecommendationsForSave> = getStore().PetsReducer.savedRecommendations.map(
     (rec: RecommendationResponse) => {
       return {
-        pet: rec.pet,
-        recommendation: rec.recommendation,
-        kibble: { product: { title: rec.kibble.product.title } },
-        topper: { product: { title: rec.topper.product.title } },
+        ...(rec.pet && { pet: rec.pet }),
+        ...(rec.recommendation && { recommendation: rec.recommendation }),
+        ...(rec.kibble &&
+          rec.kibble.product &&
+          rec.kibble.product.title && {
+            kibble: { product: { title: rec.kibble.product.title } },
+          }),
+        ...(rec.topper &&
+          rec.topper.product &&
+          rec.topper.product.title && {
+            topper: { product: { title: rec.topper.product.title } },
+          }),
       };
     }
   );
-  let isDuplicate: false | number = false;
-  recommendations.forEach((rec) => {
-    savedRecommendations.forEach((r, i) => {
-      if (r.pet.id === rec.pet.id) {
-        isDuplicate = i;
+
+  if (recommendations) {
+    let isDuplicate: false | number = false;
+    recommendations.forEach((rec) => {
+      savedRecommendations.forEach((r, i) => {
+        if (r.pet.id === rec.pet.id) {
+          isDuplicate = i;
+        }
+      });
+      if (isDuplicate !== false) {
+        savedRecommendations[isDuplicate] = {
+          pet: rec.pet,
+          recommendation: rec.recommendation,
+          kibble: { product: { title: rec.kibble.product.title } },
+          topper: { product: { title: rec.topper.product.title } },
+        };
+      } else {
+        savedRecommendations.push({
+          pet: rec.pet,
+          recommendation: rec.recommendation,
+          kibble: { product: { title: rec.kibble.product.title } },
+          topper: { product: { title: rec.topper.product.title } },
+        });
       }
     });
-    if (isDuplicate !== false) {
-      savedRecommendations[isDuplicate] = {
-        pet: rec.pet,
-        recommendation: rec.recommendation,
-        kibble: { product: { title: rec.kibble.product.title } },
-        topper: { product: { title: rec.topper.product.title } },
-      };
-    } else {
-      savedRecommendations.push({
-        pet: rec.pet,
-        recommendation: rec.recommendation,
-        kibble: { product: { title: rec.kibble.product.title } },
-        topper: { product: { title: rec.topper.product.title } },
+  } else {
+    getStore().PetsReducer.pendingPets.forEach((pet: Pet) => {
+      let isSaved = false;
+      savedRecommendations.forEach((rec, i) => {
+        if (rec.pet.id === pet.id) {
+          savedRecommendations[i] = { pet };
+          isSaved = true;
+        }
       });
-    }
-  });
+      if (!isSaved) {
+        savedRecommendations.push({ pet });
+      }
+    });
+  }
+
   firebase
     .functions()
-    .httpsCallable("CALL-savePet")({
+    .httpsCallable('CALL-savePet')({
       customerId:
-        process.env.NODE_ENV === "development"
+        process.env.NODE_ENV === 'development'
           ? process.env.REACT_APP_CUSTOMER_ID
           : customerId,
       pets: savedRecommendations,
     })
+    .then(() => {
+      dispatch({
+        type: StoreActions.IS_LOADING_PETS,
+        payload: false,
+      });
+      dispatch({
+        type: StoreActions.FETCHED_PETS,
+        payload: savedRecommendations,
+      });
+    })
     .catch((error) => {
       console.log(error);
     });
-};
-
-export const startNewPet = (): HoliThunk => async (dispatch) => {
-  dispatch({
-    type: StoreActions.StartNewPet,
-  });
 };

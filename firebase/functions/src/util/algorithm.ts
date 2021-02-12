@@ -73,7 +73,7 @@ export const runAlgorithm = (data: any): AlgorithmResponse => {
     ageMonths
   );
 
-  const neuteredValue = neutered ? NeuterValues.true : NeuterValues.false;
+  const neuteredValue = neutered ? NeuterValues.TRUE : NeuterValues.FALSE;
   const derFactors: Array<number> = [
     Number(activity),
     Number(body),
@@ -93,44 +93,44 @@ export const runAlgorithm = (data: any): AlgorithmResponse => {
       : derAvg;
   const rer = 70 * Math.pow(Number(weight) / 2.2, 0.75);
 
-  let blend = Blend.adult;
+  let blend = Blend.ADULT;
   switch (lifestage) {
     case 0:
-      blend = Blend.puppy;
+      blend = Blend.PUPPY;
       break;
     case 1:
-      if (body <= BodyValue.slightlyOver || stool === Stool.bad) {
-        blend = Blend.weightManagement;
-      } else if (body >= BodyValue.slightlyUnder) {
-        blend = Blend.puppy;
+      if (body <= BodyValue.SLIGHTLY_OVER || stool === Stool.BAD) {
+        blend = Blend.WEIGHT_MANAGEMENT;
+      } else if (body >= BodyValue.SLIGHTLY_UNDER) {
+        blend = Blend.PUPPY;
       } else {
-        blend = Blend.adult;
+        blend = Blend.ADULT;
       }
       break;
     case 2:
-      if (body <= BodyValue.slightlyOver || stool === Stool.bad) {
-        blend = Blend.weightManagement;
+      if (body <= BodyValue.SLIGHTLY_OVER || stool === Stool.BAD) {
+        blend = Blend.WEIGHT_MANAGEMENT;
       } else {
-        blend = Blend.adult;
+        blend = Blend.ADULT;
       }
   }
 
   const kibbleHandle =
-    blend === Blend.puppy
-      ? KibbleHandle.puppy
-      : blend === Blend.weightManagement
-      ? KibbleHandle.weight
-      : KibbleHandle.adult;
+    blend === Blend.PUPPY
+      ? KibbleHandle.PUPPY
+      : blend === Blend.WEIGHT_MANAGEMENT
+      ? KibbleHandle.WEIGHT
+      : KibbleHandle.ADULT;
 
   const dailyCalories = rer * derFactor;
   const dailyVolumeCups =
     (0.95 * dailyCalories) / formulationVolumes[blend].bulk;
   const dailyVolumeTbsp =
-    (0.05 * dailyCalories) / formulationVolumes[Blend.topper].bulk;
+    (0.05 * dailyCalories) / formulationVolumes[Blend.TOPPER].bulk;
   const dailyWeightKibble =
     ((0.95 * dailyCalories) / formulationVolumes[blend].cal) * 2.2;
   const dailyWeightProtein =
-    ((dailyCalories * 0.05) / formulationVolumes[Blend.topper].cal) * 35.274;
+    ((dailyCalories * 0.05) / formulationVolumes[Blend.TOPPER].cal) * 35.274;
   const fortyFiveWeightKibble = dailyWeightKibble * 45;
   const fortyFiveWeightProtein = dailyWeightProtein * 45;
 
@@ -224,19 +224,19 @@ export const runAlgorithm = (data: any): AlgorithmResponse => {
 };
 
 const formulationVolumes = {
-  [Blend.puppy]: {
+  [Blend.PUPPY]: {
     cal: 3799,
     bulk: 441,
   },
-  [Blend.adult]: {
+  [Blend.ADULT]: {
     cal: 3847,
     bulk: 435,
   },
-  [Blend.weightManagement]: {
+  [Blend.WEIGHT_MANAGEMENT]: {
     cal: 3594,
     bulk: 409,
   },
-  [Blend.topper]: {
+  [Blend.TOPPER]: {
     cal: 3900,
     bulk: 17.55,
   },

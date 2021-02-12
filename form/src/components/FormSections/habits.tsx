@@ -1,16 +1,18 @@
-import React, { useState } from "react";
-import { useGetPossessive } from "../../hooks";
-import { Stool, PetFields } from "../../entities/pets";
-import { FormSectionProps, FormSections } from "../../entities/form";
+import React, { useState } from 'react';
+import { useGetPossessive } from '../../hooks';
+import { Stool, PetFields } from '../../entities/pets';
+import { FormSectionProps, FormSections } from '../../entities/form';
 
 export const Habits = ({
-  pet,
   onChangePet,
-  onSavePet,
   onNavigateForm,
+  onSavePendingPet,
+  onSavePet,
+  pet,
+  plural,
 }: FormSectionProps) => {
   const dogName = useGetPossessive(pet.name);
-  const [stool, setStool] = useState<string>("Never");
+  const [stool, setStool] = useState<string>('Never');
   return (
     <section id="pet-profile-section-3" className="pet-profile-section">
       <div className="content">
@@ -31,7 +33,7 @@ export const Habits = ({
                     onChange={(event) =>
                       onChangePet({
                         value: Number(event.target.value),
-                        field: PetFields.picky,
+                        field: PetFields.PICKY,
                       })
                     }
                   />
@@ -57,7 +59,7 @@ export const Habits = ({
                     onChange={(event) =>
                       onChangePet({
                         value: Number(event.target.value),
-                        field: PetFields.treats,
+                        field: PetFields.TREATS,
                       })
                     }
                   />
@@ -83,7 +85,7 @@ export const Habits = ({
                     onChange={(event) =>
                       onChangePet({
                         value: Number(event.target.value),
-                        field: PetFields.scraps,
+                        field: PetFields.SCRAPS,
                       })
                     }
                   />
@@ -110,7 +112,7 @@ export const Habits = ({
                     onChange={(event) =>
                       onChangePet({
                         value: event.target.value,
-                        field: PetFields.allergies,
+                        field: PetFields.ALLERGIES,
                       })
                     }
                     type="checkbox"
@@ -140,7 +142,7 @@ export const Habits = ({
                     onChange={(event) =>
                       onChangePet({
                         value: event.target.value,
-                        field: PetFields.issues,
+                        field: PetFields.ISSUES,
                       })
                     }
                     type="checkbox"
@@ -163,11 +165,11 @@ export const Habits = ({
                 setStool(event.target.value);
                 onChangePet({
                   value:
-                    event.target.value === "Sometimes" ||
-                    event.target.value === "Never"
-                      ? Stool.good
-                      : Stool.bad,
-                  field: PetFields.stool,
+                    event.target.value === 'Sometimes' ||
+                    event.target.value === 'Never'
+                      ? Stool.GOOD
+                      : Stool.BAD,
+                  field: PetFields.STOOL,
                 });
               }}
               value={stool}
@@ -184,28 +186,46 @@ export const Habits = ({
           </label>
         </p>
       </div>
-      <div className="pet-profile-form-nav">
-        <span
+      <div
+        className="pet-profile-form-nav"
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <a
           className="button-text"
-          onClick={() => {
-            onSavePet && onSavePet();
-            onNavigateForm(FormSections.activity);
-          }}
-        >
-          <i className="fa fa-angle-left"></i>
-          Back
-        </span>
-        <button
-          className="button"
           onClick={(event) => {
             event.preventDefault();
             onSavePet && onSavePet();
-            onNavigateForm(FormSections.toppers);
           }}
         >
-          Next
-          <i className="fa fa-angle-right"></i>
-        </button>
+          Save Pet{plural && 's'}
+        </a>
+        <div>
+          <span
+            className="button-text"
+            onClick={() => {
+              onSavePendingPet && onSavePendingPet();
+              onNavigateForm(FormSections.activity);
+            }}
+          >
+            <i className="fa fa-angle-left"></i>
+            Back
+          </span>
+          <button
+            className="button"
+            onClick={(event) => {
+              event.preventDefault();
+              onSavePendingPet && onSavePendingPet();
+              onNavigateForm(FormSections.toppers);
+            }}
+          >
+            Next
+            <i className="fa fa-angle-right"></i>
+          </button>
+        </div>
       </div>
     </section>
   );
@@ -213,7 +233,7 @@ export const Habits = ({
 
 const pickyOptions = [
   {
-    description: "Super Picky",
+    description: 'Super Picky',
     value: 0,
   },
   {
@@ -226,152 +246,152 @@ const pickyOptions = [
     value: 3,
   },
   {
-    description: "Eats Everything",
+    description: 'Eats Everything',
     value: 4,
   },
 ];
 
 const treatsOptions = [
   {
-    description: "Never",
+    description: 'Never',
     value: 0,
   },
   {
-    description: "Occasionaly",
+    description: 'Occasionaly',
     value: 1,
   },
   {
-    description: "Daily",
+    description: 'Daily',
     value: 2,
   },
 ];
 
 const scrapsOptions = [
   {
-    description: "Never",
+    description: 'Never',
     value: 0,
   },
   {
-    description: "Rarely",
+    description: 'Rarely',
     value: 1,
   },
   {
-    description: "Sometimes",
+    description: 'Sometimes',
     value: 2,
   },
   {
-    description: "Frequently",
+    description: 'Frequently',
     value: 3,
   },
 ];
 
 const allergiesOptions = [
   {
-    description: "None",
+    description: 'None',
   },
   {
-    description: "Beef",
+    description: 'Beef',
   },
   {
-    description: "Dairy",
+    description: 'Dairy',
   },
   {
-    description: "Wheat",
+    description: 'Wheat',
   },
   {
-    description: "Eggs",
+    description: 'Eggs',
   },
   {
-    description: "Chicken",
+    description: 'Chicken',
   },
   {
-    description: "Lamb",
+    description: 'Lamb',
   },
   {
-    description: "Soy",
+    description: 'Soy',
   },
   {
-    description: "Pork",
+    description: 'Pork',
   },
   {
-    description: "Rabbit",
+    description: 'Rabbit',
   },
   {
-    description: "Fish",
+    description: 'Fish',
   },
   {
-    description: "Turkey",
+    description: 'Turkey',
   },
   {
-    description: "Other",
+    description: 'Other',
   },
 ];
 
 const issuesOptions = [
   {
-    description: "None",
+    description: 'None',
   },
   {
-    description: "Anxiety",
+    description: 'Anxiety',
   },
   {
-    description: "Bad Breath",
+    description: 'Bad Breath',
   },
   {
-    description: "Blindness",
+    description: 'Blindness',
   },
   {
-    description: "Chews Paws",
+    description: 'Chews Paws',
   },
   {
-    description: "Ear Infections",
+    description: 'Ear Infections',
   },
   {
-    description: "Hyperactive",
+    description: 'Hyperactive',
   },
   {
-    description: "Itchiness",
+    description: 'Itchiness',
   },
   {
-    description: "Joints",
+    description: 'Joints',
   },
   {
-    description: "Constipation",
+    description: 'Constipation',
   },
   {
-    description: "Lethargy",
+    description: 'Lethargy',
   },
   {
-    description: "Passes Gas",
+    description: 'Passes Gas',
   },
   {
-    description: "Skin and Coat",
+    description: 'Skin and Coat',
   },
   {
-    description: "Tear Stains",
+    description: 'Tear Stains',
   },
   {
-    description: "Urinary Tract",
+    description: 'Urinary Tract',
   },
   {
-    description: "Vomiting",
+    description: 'Vomiting',
   },
   {
-    description: "Other",
+    description: 'Other',
   },
 ];
 
 const stoolOptions = [
   {
-    description: "Never",
-    value: "Never",
+    description: 'Never',
+    value: 'Never',
   },
   {
-    description: "Sometimes",
-    value: "Sometimes",
+    description: 'Sometimes',
+    value: 'Sometimes',
   },
   {
-    description: "Frequently",
-    value: "Frequently",
+    description: 'Frequently',
+    value: 'Frequently',
   },
 ];

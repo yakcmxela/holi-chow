@@ -1,4 +1,4 @@
-import { PetFields, Pet } from "./pets";
+import { PetFields, Pet } from './pets';
 
 export enum FormSections {
   activity = 2,
@@ -19,5 +19,7 @@ export interface FormSectionProps {
   onChangePet: (changePetField: ChangePetArguments) => void;
   onNavigateForm: (index: FormSections) => void;
   onSavePet?: () => void;
+  onSavePendingPet?: () => void;
   pet: Pet;
+  plural?: boolean;
 }

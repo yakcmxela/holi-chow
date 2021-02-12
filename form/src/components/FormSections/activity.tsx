@@ -1,19 +1,21 @@
-import React from "react";
+import React from 'react';
 import {
   BodyValue,
   ActivityDescription,
   PetFields,
   BodyDescription,
   ActivityValue,
-} from "../../entities/pets";
-import { useGetPossessive } from "../../hooks";
-import { FormSectionProps, FormSections } from "../../entities/form";
+} from '../../entities/pets';
+import { useGetPossessive } from '../../hooks';
+import { FormSectionProps, FormSections } from '../../entities/form';
 
 export const Activity = ({
-  pet,
   onChangePet,
   onNavigateForm,
+  onSavePendingPet,
   onSavePet,
+  pet,
+  plural,
 }: FormSectionProps) => {
   const dogName = useGetPossessive(pet.name);
   return (
@@ -34,7 +36,7 @@ export const Activity = ({
                   onChange={(event) =>
                     onChangePet({
                       value: Number(event.target.value),
-                      field: PetFields.body,
+                      field: PetFields.BODY,
                     })
                   }
                   type="radio"
@@ -57,7 +59,7 @@ export const Activity = ({
                   onChange={(event) =>
                     onChangePet({
                       value: Number(event.target.value),
-                      field: PetFields.activity,
+                      field: PetFields.ACTIVITY,
                     })
                   }
                   type="radio"
@@ -70,126 +72,144 @@ export const Activity = ({
           ))}
         </ul>
       </div>
-      <div className="pet-profile-form-nav">
-        <span
+      <div
+        className="pet-profile-form-nav"
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}
+      >
+        <a
           className="button-text"
-          onClick={() => {
-            onSavePet && onSavePet();
-            onNavigateForm(FormSections.profile);
-          }}
-        >
-          <i className="fa fa-angle-left"></i>
-          Back
-        </span>
-        <button
-          className="button"
           onClick={(event) => {
             event.preventDefault();
             onSavePet && onSavePet();
-            onNavigateForm(FormSections.habits);
           }}
         >
-          Next
-          <i className="fa fa-angle-right"></i>
-        </button>
+          Save Pet{plural && 's'}
+        </a>
+        <div>
+          <span
+            className="button-text"
+            onClick={() => {
+              onSavePendingPet && onSavePendingPet();
+              onNavigateForm(FormSections.profile);
+            }}
+          >
+            <i className="fa fa-angle-left"></i>
+            Back
+          </span>
+          <button
+            className="button"
+            onClick={(event) => {
+              event.preventDefault();
+              onSavePendingPet && onSavePendingPet();
+              onNavigateForm(FormSections.habits);
+            }}
+          >
+            Next
+            <i className="fa fa-angle-right"></i>
+          </button>
+        </div>
       </div>
     </section>
   );
 };
 
 const underweight =
-  process.env.NODE_ENV === "development"
-    ? require("../../public/underweight.png")
+  process.env.NODE_ENV === 'development'
+    ? require('../../public/underweight.png')
     : '{{ "underweight.png" | asset_url }}';
 const underweightSlightly =
-  process.env.NODE_ENV === "development"
-    ? require("../../public/underweight-slightly.png")
+  process.env.NODE_ENV === 'development'
+    ? require('../../public/underweight-slightly.png')
     : '{{ "underweight-slightly.png" | asset_url }}';
 const ideal =
-  process.env.NODE_ENV === "development"
-    ? require("../../public/ideal.png")
+  process.env.NODE_ENV === 'development'
+    ? require('../../public/ideal.png')
     : '{{ "ideal.png" | asset_url }}';
 const overweight =
-  process.env.NODE_ENV === "development"
-    ? require("../../public/overweight.png")
+  process.env.NODE_ENV === 'development'
+    ? require('../../public/overweight.png')
     : '{{ "overweight.png" | asset_url }}';
 const overweightSlightly =
-  process.env.NODE_ENV === "development"
-    ? require("../../public/overweight-slightly.png")
+  process.env.NODE_ENV === 'development'
+    ? require('../../public/overweight-slightly.png')
     : '{{ "overweight-slightly.png" | asset_url }}';
 const potato =
-  process.env.NODE_ENV === "development"
-    ? require("../../public/potato.png")
+  process.env.NODE_ENV === 'development'
+    ? require('../../public/potato.png')
     : '{{ "potato.png" | asset_url }}';
 const walker =
-  process.env.NODE_ENV === "development"
-    ? require("../../public/walker.png")
+  process.env.NODE_ENV === 'development'
+    ? require('../../public/walker.png')
     : '{{ "walker.png" | asset_url }}';
 const jogger =
-  process.env.NODE_ENV === "development"
-    ? require("../../public/jogger.png")
+  process.env.NODE_ENV === 'development'
+    ? require('../../public/jogger.png')
     : '{{ "jogger.png" | asset_url }}';
 const runner =
-  process.env.NODE_ENV === "development"
-    ? require("../../public/runner.png")
+  process.env.NODE_ENV === 'development'
+    ? require('../../public/runner.png')
     : '{{ "runner.png" | asset_url }}';
 const olympian =
-  process.env.NODE_ENV === "development"
-    ? require("../../public/olympian.png")
+  process.env.NODE_ENV === 'development'
+    ? require('../../public/olympian.png')
     : '{{ "olympian.png" | asset_url }}';
 
 const bodyConditions = [
   {
-    description: BodyDescription.under,
+    description: BodyDescription.UNDER,
     image: underweight,
-    value: BodyValue.under,
+    value: BodyValue.UNDER,
   },
   {
-    description: BodyDescription.slightlyUnder,
+    description: BodyDescription.SLIGHTLY_UNDER,
     image: underweightSlightly,
-    value: BodyValue.slightlyUnder,
+    value: BodyValue.SLIGHTLY_UNDER,
   },
   {
-    description: BodyDescription.ideal,
+    description: BodyDescription.IDEAL,
     image: ideal,
-    value: BodyValue.ideal,
+    value: BodyValue.IDEAL,
   },
   {
-    description: BodyDescription.slightlyOver,
+    description: BodyDescription.SLIGHTLY_OVER,
     image: overweightSlightly,
-    value: BodyValue.slightlyOver,
+    value: BodyValue.SLIGHTLY_OVER,
   },
   {
-    description: BodyDescription.overweight,
+    description: BodyDescription.OVERWEIGHT,
     image: overweight,
-    value: BodyValue.overweight,
+    value: BodyValue.OVERWEIGHT,
   },
 ];
 
 const activityLevels = [
   {
-    description: ActivityDescription.potato,
+    description: ActivityDescription.POTATO,
     image: potato,
-    value: ActivityValue.potato,
+    value: ActivityValue.POTATO,
   },
   {
-    description: ActivityDescription.walker,
+    description: ActivityDescription.WALKER,
     image: walker,
-    value: ActivityValue.walker,
+    value: ActivityValue.WALKER,
   },
   {
-    description: ActivityDescription.jogger,
+    description: ActivityDescription.JOGGER,
     image: jogger,
-    value: ActivityValue.jogger,
+    value: ActivityValue.JOGGER,
   },
   {
-    description: ActivityDescription.runner,
+    description: ActivityDescription.RUNNER,
     image: runner,
-    value: ActivityValue.runner,
+    value: ActivityValue.RUNNER,
   },
   {
-    description: ActivityDescription.olympian,
+    description: ActivityDescription.OLYMPIAN,
     image: olympian,
-    value: ActivityValue.olympian,
+    value: ActivityValue.OLYMPIAN,
   },
 ];

@@ -1,22 +1,55 @@
-import React from "react";
-import { PetFields } from "../../entities/pets";
-import { FormSections, FormSectionProps } from "../../entities/form";
+import React from 'react';
+import { Pet, PetFields } from '../../entities/pets';
+import { FormSections, FormSectionProps } from '../../entities/form';
 
 interface OnboardingProps extends FormSectionProps {
+  onChangeActivePet: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   onResetPet: () => void;
+  pets: Array<Pet>;
 }
 
 export const Onboarding = ({
+  onChangeActivePet,
   onChangePet,
   onNavigateForm,
   onResetPet,
-  onSavePet,
+  onSavePendingPet,
   pet,
+  pets,
 }: OnboardingProps) => {
   return (
     <section id="pet-profile-section-0" className="pet-profile-section">
       <div className="content">
         <h1>My Pet Profile</h1>
+        {pets.length > 0 && (
+          <div
+            className="fields"
+            style={{
+              paddingTop: '12px',
+              paddingBottom: '12px',
+              float: 'none',
+              width: 'auto',
+            }}
+          >
+            <label style={{ fontSize: 16 }}>
+              Select a different pet
+              <select
+                onChange={onChangeActivePet}
+                value={pet.id}
+                style={{ display: 'block' }}
+              >
+                <option value={'new'}>New pet</option>
+                {pets.map((p) => {
+                  return (
+                    <option key={p.id} value={p.id}>
+                      {p.name}
+                    </option>
+                  );
+                })}
+              </select>
+            </label>
+          </div>
+        )}
         <p>
           Your dog’s size, breed, age, and activity level determine their
           nutritional needs. Pickiness and food sensitivities come in all shapes
@@ -38,7 +71,7 @@ export const Onboarding = ({
             onChange={(event) =>
               onChangePet({
                 value: String(event.target.value),
-                field: PetFields.name,
+                field: PetFields.NAME,
               })
             }
           />
@@ -49,11 +82,11 @@ export const Onboarding = ({
 
         <div className="pet-profile-form-nav">
           <button
-            disabled={pet.name === ""}
-            className={`button ${pet.name === "" && "disable"}`}
+            disabled={pet.name === ''}
+            className={`button ${pet.name === '' && 'disable'}`}
             onClick={(event) => {
               event.preventDefault();
-              onSavePet && onSavePet();
+              onSavePendingPet && onSavePendingPet();
               onNavigateForm(FormSections.profile);
             }}
           >
@@ -66,7 +99,7 @@ export const Onboarding = ({
             }}
             className="button"
           >
-            Clear Form and Start Over
+            Start Over
           </button>
         </div>
       </div>
@@ -75,6 +108,6 @@ export const Onboarding = ({
 };
 
 const onboardingDog =
-  process.env.NODE_ENV === "development"
-    ? require("../../public/onboarding-pup.jpg")
+  process.env.NODE_ENV === 'development'
+    ? require('../../public/onboarding-pup.jpg')
     : "{{ 'onboarding-pup.jpg' | asset_url }}";

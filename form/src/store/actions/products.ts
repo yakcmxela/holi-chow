@@ -3,7 +3,6 @@ import { RecommendationResponse, ATCRequest } from "../../entities/api";
 import { savePetsToCustomer } from "./pets";
 import { StoreActions } from "../../entities/actions";
 import axios from "axios";
-import { Recommendation } from "../../components/Recommendation";
 
 const functionsUrl =
   process.env.NODE_ENV === "production"
@@ -16,7 +15,7 @@ export const addProductsToCart = (): HoliThunk => async (
 ) => {
   try {
     dispatch({
-      type: StoreActions.IsLoadingProducts,
+      type: StoreActions.IS_LOADING_PETS,
       payload: true,
     });
     const recommendations: Array<RecommendationResponse> = getStore()
@@ -32,13 +31,14 @@ export const addProductsToCart = (): HoliThunk => async (
           dailyCalories: Math.floor(
             recommendation.recommendation.dailyCalories
           ),
-          dailyVolumeTbsp: recommendation.recommendation.dailyVolumeTbsp.toFixed(
-            2
-          ),
-          dailyVolumeCups: recommendation.recommendation.dailyVolumeCups.toFixed(
-            2
-          ),
+          dailyVolumeTbsp:
+            Math.round(recommendation.recommendation.dailyVolumeTbsp / 0.5) *
+            0.5,
+          dailyVolumeCups:
+            Math.round(recommendation.recommendation.dailyVolumeCups / 0.25) *
+            0.25,
         };
+
         const kibbleItems = kibble.variants.map((k) => {
           return {
             quantity: k.quantity,
@@ -73,7 +73,7 @@ export const addProductsToCart = (): HoliThunk => async (
 export const fetchTopperProducts = (): HoliThunk => async (dispatch) => {
   try {
     dispatch({
-      type: StoreActions.IsLoadingProducts,
+      type: StoreActions.IS_LOADING_PETS,
       payload: true,
     });
     const response = await axios.get(`${functionsUrl}/REQUEST-fetchToppers`, {
@@ -82,7 +82,7 @@ export const fetchTopperProducts = (): HoliThunk => async (dispatch) => {
       },
     });
     dispatch({
-      type: StoreActions.FetchedToppers,
+      type: StoreActions.FETCHED_TOPPER,
       payload: response.data,
     });
   } catch (error) {
@@ -90,30 +90,22 @@ export const fetchTopperProducts = (): HoliThunk => async (dispatch) => {
   }
 };
 
-export const resetResults = (): HoliThunk => async (dispatch) => {
-  dispatch({
-    type: StoreActions.FetchedRecommendations,
-    payload: undefined,
-  });
-};
-
 export const runRecommendationTool = (customerId: string): HoliThunk => async (
   dispatch,
   getStore
 ) => {
   dispatch({
-    type: StoreActions.IsLoadingProducts,
+    type: StoreActions.IS_LOADING_PETS,
     payload: true,
   });
   const pets = getStore().PetsReducer.pendingPets;
-  console.log(pets)
   try {
     const {
       data,
     } = await axios.post(`${functionsUrl}/REQUEST-recommendProduct`, { pets });
     dispatch(savePetsToCustomer(customerId, data.recommendations));
     dispatch({
-      type: StoreActions.FetchedRecommendations,
+      type: StoreActions.FETCHED_RECS,
       payload: data.recommendations,
     });
   } catch (error) {
